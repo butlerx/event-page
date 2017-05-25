@@ -1,0 +1,39 @@
+{
+  "name": "event-js",
+  "version": "1.0.0",
+  "description": "simple static site generator for events",
+  "main": "index.js",
+  "author": "butlerx",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint .",
+    "fix": "eslint . --fix",
+    "build": "babel src --source-maps --out-dir lib",
+    "build:watch": "babel src --watch --source-maps --out-dir lib"
+  },
+  "dependencies": {
+    "glob": "^7.1.2",
+    "handlebars": "^4.0.10",
+    "json-front-matter": "^1.0.0",
+    "jsonschema": "^1.1.1",
+    "marked": "^0.3.6"
+  },
+  "devDependencies": {
+    "babel-cli": "6.24.1",
+    "babel-core": "6.24.1",
+    "babel-eslint": "7.2.3",
+    "babel-plugin-add-module-exports": "0.2.1",
+    "babel-plugin-es6-promise": "1.1.1",
+    "babel-plugin-syntax-async-functions": "6.13.0",
+    "babel-plugin-transform-async-to-generator": "6.24.1",
+    "babel-plugin-transform-object-assign": "6.22.0",
+    "babel-preset-es2015": "6.24.1",
+    "eslint": "3.19.0",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-standard": "3.0.1"
+  }
+}
