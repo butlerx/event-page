@@ -1,8 +1,11 @@
 {
-  "name": "event-js",
-  "version": "1.0.0",
+  "name": "event-page",
+  "version": "1.0.1",
   "description": "simple static site generator for events",
-  "main": "index.js",
+  "main": "lib/generate.js",
+  "bin": {
+    "event-gen": "bin/app.js"
+  },
   "author": "butlerx",
   "license": "MIT",
   "scripts": {
@@ -14,26 +17,30 @@
   "dependencies": {
     "glob": "^7.1.2",
     "handlebars": "^4.0.10",
-    "json-front-matter": "^1.0.0",
+    "json-matter": "^1.0.2",
     "jsonschema": "^1.1.1",
     "marked": "^0.3.6"
   },
   "devDependencies": {
-    "babel-cli": "6.24.1",
+    "babel-cli": "^6.24.1",
     "babel-core": "6.24.1",
-    "babel-eslint": "7.2.3",
+    "babel-eslint": "^7.2.3",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-plugin-es6-promise": "1.1.1",
     "babel-plugin-syntax-async-functions": "6.13.0",
     "babel-plugin-transform-async-to-generator": "6.24.1",
     "babel-plugin-transform-object-assign": "6.22.0",
     "babel-preset-es2015": "6.24.1",
+    "babel-preset-flow": "^6.23.0",
+    "es6-promise": "^4\n",
     "eslint": "3.19.0",
     "eslint-config-standard": "10.2.1",
+    "eslint-plugin-flowtype": "^2.33.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "3.5.0",
-    "eslint-plugin-standard": "3.0.1"
+    "eslint-plugin-standard": "3.0.1",
+    "flow-bin": "^0.47.0"
   }
 }

@@ -1,21 +1,17 @@
 {
-  "extends": "standard",
+  "parser": "babel-eslint",
+  "plugins": [
+    "flowtype"
+  ],
+  "extends": [
+    "standard",
+    "plugin:flowtype/recommended"
+  ],
   "env": {
     "es6": true,
-    "jest": true,
-    "browser": true,
-    "node": true,
-    "jquery": true
-  },
-  "plugins": [
-    "json"
-  ],
-  "globals": {
-    "GENTLY": true,
-    "start": true
+    "node": true
   },
   "rules": {
-    "no-console": 0,
     "no-multi-spaces": 0,
     "comma-dangle": [
       "error",
@@ -35,18 +31,6 @@
           "mode": "strict"
         }
       }
-    ],
-    "indent": [
-      "error",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
     ],
     "semi": [
       "error",

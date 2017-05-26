@@ -1,19 +1,18 @@
+/* @flow */
 const fs = require('fs');
 const glob = require('glob');
-const fm = require('json-front-matter');
+const fm = require('json-matter');
 const path = require('path');
 const validate = require('jsonschema').validate;
 const config = require(path.join(process.cwd(), 'config.json'));
-let schemaPath = '../schema.json';
-if (config.schema) {
-  schemaPath = path.join(process.cwd(), config.schema);
-}
-const schema = require(schemaPath);
 
 module.exports = {
-  validate () {
+  /**
+   * Validate all json files obey  the schema
+   **/
+  validate (schemaPath: string) {
     glob(
-      path.join(process.cwd(), config.source, '*'),
+      path.join(process.cwd(), config.source, '*.json'),
       {
         ignore: 'node_modules',
       },
@@ -24,9 +23,7 @@ module.exports = {
             if (err) throw err;
             const file = fm.parse(data);
             const json = file.attributes;
-            if (json.template === 'schedule') {
-              checkJson(i, json);
-            }
+            checkJson(i, json, schemaPath);
           });
         }
       }
@@ -34,11 +31,17 @@ module.exports = {
   },
 };
 
-function checkJson (filename, json) {
+/**
+ * Check json object against schema
+ **/
+function checkJson (filename: string, json: {}, schemaPath: string): boolean {
+  const schema = require(schemaPath);
   try {
     validate(json, schema, { throwError: true });
+    return true;
   } catch (err) {
+    if (err) throw err;
     console.error(filename, err);
-    process.exit(1);
+    return false;
   }
 }
