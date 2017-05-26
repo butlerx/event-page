@@ -9,17 +9,21 @@ const config = require(path.join(process.cwd(), 'config.json'));
 const source = path.join(process.cwd(), config.source || 'source');
 const outputDir = path.join(process.cwd(), config.output || 'public');
 
-glob.sync(path.join(process.cwd(), config.helper || 'helper', '**', '*.js')).forEach(file => {
+// Load all helper files
+glob.sync(path.join(process.cwd(), config.theme || 'theme', config.helper || 'helper', '**', '*.js')).forEach(file => {
   Handlebars.registerHelper(require(path.resolve(file)));
 });
 
 function render (template, page, url) {
   template = `${template}.hbs`;
-  const output = Handlebars.compile(fs.readFileSync(path.join(process.cwd(), 'templates', template), 'utf-8'))(page);
+  // Load template and compile
+  const output = Handlebars.compile(fs.readFileSync(path.join(process.cwd(), config.theme || 'theme', config.template || 'templates', template), 'utf-8'))(page);
+  // Create output dir if it doesnt exist
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir);
   }
   let dir = outputDir;
+  // if home page skip else create page dir
   if (url !== 'index') {
     dir = path.join(dir, url);
     if (!fs.existsSync(dir)) {
@@ -31,8 +35,29 @@ function render (template, page, url) {
   });
 }
 
+function generateMenu () {
+  config.menu = [];
+  config.menu.push({
+    title : "Home",
+    url   : "",
+  });
+  fs.readdirSync(source).forEach(file => {
+    if (file !== 'index.md') {
+      config.menu.push({
+        title : file.substring(0, file.lastIndexOf('.')),
+        url   : file.substring(0, file.lastIndexOf('.')),
+      });
+    }
+  })
+}
+
 module.exports = () => {
+  // Validate JSON against schema
   checkJson.validate();
+  // Generate Menu if not in Config
+  if (!config.menu) {
+    generateMenu();
+  }
   fs.readdir(source, (err, pages) => {
     if (err) throw err;
     for (const page of pages) {
@@ -42,6 +67,7 @@ module.exports = () => {
         const file = fm.parse(data);
         const json = file.attributes;
         json.site = config;
+        // inject md in to body
         json.body = marked(file.body);
         render(json.template, json, url);
       });
