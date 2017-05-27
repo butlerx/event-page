@@ -5,3 +5,6 @@
 [libs]
 
 [options]
+all=true
+emoji=true
+module.use_strict=true

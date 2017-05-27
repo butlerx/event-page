@@ -12,6 +12,7 @@
     "node": true
   },
   "rules": {
+    "flowtype/no-types-missing-file-annotation": 0,
     "no-multi-spaces": 0,
     "comma-dangle": [
       "error",

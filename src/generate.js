@@ -1,14 +1,19 @@
-/* @flow */
 const Handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 const fm = require('json-matter');
 const marked = require('marked');
+const object = require('lodash/fp/object');
+
+// Local libraries
 const checkJson = require('./checkEventJson');
+const assets = require('./assets');
+
+// Initialise variables
 const config = require(path.join(process.cwd(), 'config.json'));
 const source = path.join(process.cwd(), config.source || 'source');
-const outputDir = path.join(process.cwd(), config.output || 'public');
+const outputDir = path.join(process.cwd(), config.output.dir || 'public');
 
 // Load all helper files
 glob.sync(path.join(process.cwd(), config.theme || 'theme', config.helper || 'helper', '**', '*.js')).forEach(file => {
@@ -18,7 +23,7 @@ glob.sync(path.join(process.cwd(), config.theme || 'theme', config.helper || 'he
 /**
  * Render pages with handle bar template
  **/
-function render (template: string, page: {}, url: string) {
+function render (template: string, page: ?{}, url: string): void {
   template = `${template}.hbs`;
   // Load template and compile
   const output = Handlebars.compile(fs.readFileSync(path.join(process.cwd(), config.theme || 'theme', config.template || 'templates', template), 'utf-8'))(page);
@@ -43,29 +48,32 @@ function render (template: string, page: {}, url: string) {
  * Generate a menu based on the file names in the pages dir
  * index.[md|json] is called Home
  **/
-function generateMenu () {
-  config.menu = [];
-  config.menu.push({
+function generateMenu (): Array<{ title: string, url: string}> {
+  const menu = [];
+  menu.push({
     title: 'Home',
     url  : '',
   });
   fs.readdirSync(source).forEach(file => {
     if (file.substring(0, file.lastIndexOf('.')) !== 'index') {
-      console.log(file);
-      config.menu.push({
+      menu.push({
         title: file.substring(0, file.lastIndexOf('.')),
         url  : file.substring(0, file.lastIndexOf('.')),
       });
     }
   });
+  return menu;
 }
 
-module.exports = () => {
+function generate (configArgs: ?{}): void {
+  object.merge(config, configArgs);
   // Validate JSON against schema
-  checkJson.validate(path.join(process.cwd(), config.schema) || './schema.json');
+  checkJson.validate(path.join(process.cwd(), config.schema) || '../schema.json');
+  assets.staticMove(path.join(process.cwd(), config.theme || 'theme'), outputDir, config.staitic);
+  assets.scss(path.join(process.cwd(), config.theme || 'theme', 'css', config.css || 'main.scss'), path.join(outputDir, 'css', config.output.css || 'main.css'));
   // Generate Menu if not in Config
   if (!config.menu) {
-    generateMenu();
+    config.menu = generateMenu();
   }
   fs.readdir(source, (err, pages) => {
     if (err) throw err;
@@ -82,3 +90,5 @@ module.exports = () => {
     }
   });
 };
+
+module.exports = generate;
