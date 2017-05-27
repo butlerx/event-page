@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const fs = require('fs-extra');
 const commandLineArgs = require('command-line-args');
 
