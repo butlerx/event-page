@@ -13,7 +13,10 @@ const assets = require('./assets');
 // Initialise variables
 const config = require(path.join(process.cwd(), 'config.json'));
 const source = path.join(process.cwd(), config.source || 'source');
-const outputDir = path.join(process.cwd(), config.output.dir || 'public');
+let outputDir = path.join(process.cwd(), 'public');
+if (config.output) {
+  outputDir = path.join(process.cwd(), config.output.dir || 'public');
+}
 
 // Load all helper files
 glob.sync(path.join(process.cwd(), config.theme || 'theme', config.helper || 'helper', '**', '*.js')).forEach(file => {
@@ -68,9 +71,15 @@ function generateMenu (): Array<{ title: string, url: string}> {
 function generate (configArgs: ?{}): void {
   object.merge(config, configArgs);
   // Validate JSON against schema
-  checkJson.validate(path.join(process.cwd(), config.schema) || '../schema.json');
+  let schemaPath = '../schema.json';
+  if (config.schema) {
+    let schemaPath = path.join(process.cwd(), config.schema);
+  }
+  checkJson.validate(schemaPath, source);
   assets.staticMove(path.join(process.cwd(), config.theme || 'theme'), outputDir, config.staitic);
-  assets.scss(path.join(process.cwd(), config.theme || 'theme', 'css', config.css || 'main.scss'), path.join(outputDir, 'css', config.output.css || 'main.css'));
+  let css = 'main.css';
+  if (config.output) css = config.output.css || css
+  assets.scss(path.join(process.cwd(), config.theme || 'theme', 'css', config.css || 'main.scss'), path.join(outputDir, 'css', css));
   // Generate Menu if not in Config
   if (!config.menu) {
     config.menu = generateMenu();

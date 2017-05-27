@@ -1,26 +1,5 @@
-const generate = require('./generate');
 const fs = require('fs-extra');
-
 const commandLineArgs = require('command-line-args');
-
-module.exports = () => {
-  const optionDefinitions = [
-    { name: 'init', alias: 'i', type: Boolean },
-  ];
-  const options = commandLineArgs(optionDefinitions);
-
-  if (options.init) {
-    config();
-    folder('theme/js');
-    folder('theme/fonts');
-    folder('theme/images');
-    folder('theme/templates');
-    file('theme/css/main.scss');
-    file('source/index.json');
-  } else {
-    generate();
-  }
-};
 
 function config (): void {
   fs.writeJson('./config.json', {
@@ -47,4 +26,21 @@ function folder (arg: string): void {
   }).catch(err => {
     console.error(err);
   });
+}
+
+const optionDefinitions = [
+  { name: 'init', alias: 'i', type: Boolean },
+];
+const options = commandLineArgs(optionDefinitions);
+
+if (options.init) {
+  config();
+  folder('theme/js');
+  folder('theme/fonts');
+  folder('theme/images');
+  file('theme/templates/schedule.hbs');
+  file('theme/css/main.scss');
+  file('source/index.json');
+} else {
+  require('./generate')();
 }

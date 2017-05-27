@@ -8,8 +8,8 @@ const config = require(path.join(process.cwd(), 'config.json'));
 /**
  * Validate all json files obey the schema
  **/
-function validate (schemaPath: string) {
-  glob(path.join(process.cwd(), config.source, '*.json'), {
+function validate (schemaPath: string, source: string) {
+  glob(path.join(source, '*.json'), {
     ignore: 'node_modules',
   }, (err, files) => {
     if (err) throw err;
@@ -39,4 +39,4 @@ function checkJson (filename: string, json: ?{}, schemaPath: string): boolean {
   }
 }
 
-module.exports = validate;
+module.exports = { validate };
