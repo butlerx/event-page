@@ -76,7 +76,7 @@ function generate (configArgs: ?{}): void {
     let schemaPath = path.join(process.cwd(), config.schema);
   }
   checkJson.validate(schemaPath, source);
-  assets.staticMove(path.join(process.cwd(), config.theme || 'theme'), outputDir, config.staitic);
+  assets.staticMove(path.join(process.cwd(), config.theme || 'theme'), outputDir, config.static);
   let css = 'main.css';
   if (config.output) css = config.output.css || css
   assets.scss(path.join(process.cwd(), config.theme || 'theme', 'css', config.css || 'main.scss'), path.join(outputDir, 'css', css));

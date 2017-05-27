@@ -7,7 +7,7 @@ const sass = require('node-sass');
  **/
 function staticMove (source: string, dest: string, assets: Array<string>): void {
   for (const i in assets) {
-    fs.copy(path.join(process.cwd(), source, i), path.join(process.cwd(), dest, i), err => {
+    fs.copy(path.join(source, assets[i]), path.join(dest, assets[i]), err => {
       if (err) console.error(err);
     });
   }
@@ -23,6 +23,14 @@ function scss (source: string, dest: string): void {
     outputStyle: 'compressed',
   }, (err, result) => {
     if (err) console.error(err);
+    fs.ensureFile(dest).then(() => {
+      fs.writeFile(dest, result.css, function(err){
+        if (err) console.error(err);
+      });
+    })
+    .catch(err => {
+      console.error(err)
+    })
   });
 }
 
