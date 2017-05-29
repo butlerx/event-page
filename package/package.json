@@ -6,13 +6,6 @@
   "bin": {
     "event-gen": "lib/cli.js"
   },
-    "repository": {
-    "type": "git",
-    "url": "https://github.com/butlerx/event-page"
-  },
-  "bugs": {
-    "url": "https://github.com/butlerx/event-page/issues"
-  },
   "author": "butlerx",
   "license": "MIT",
   "scripts": {
