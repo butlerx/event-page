@@ -1,6 +1,6 @@
 {
   "name": "event-page",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "simple static site generator for events",
   "main": "lib/generate.js",
   "bin": {
