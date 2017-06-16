@@ -24,13 +24,13 @@ function scss (source: string, dest: string): void {
   }, (err, result) => {
     if (err) console.error(err);
     fs.ensureFile(dest).then(() => {
-      fs.writeFile(dest, result.css, function(err){
+      fs.writeFile(dest, result.css, (err) => {
         if (err) console.error(err);
       });
     })
     .catch(err => {
-      console.error(err)
-    })
+      console.error(err);
+    });
   });
 }
 

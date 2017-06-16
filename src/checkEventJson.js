@@ -3,7 +3,6 @@ const glob = require('glob');
 const fm = require('json-matter');
 const path = require('path');
 const val = require('jsonschema').validate;
-const config = require(path.join(process.cwd(), 'config.json'));
 
 /**
  * Validate all json files obey the schema
@@ -27,16 +26,16 @@ function validate (schemaPath: string, source: string) {
 /**
  * Check json object against schema
  **/
-function checkJson (filename: string, json: ?{}, schemaPath: string): boolean {
-  const schema = require(schemaPath);
-  try {
-    val(json, schema, { throwError: true });
-    return true;
-  } catch (err) {
-    if (err) throw err;
-    console.error(filename, err);
-    return false;
-  }
-}
+const checkJson = (filename: string, json: ?{}, schemaPath: string): Promise => {
+  return new Promise((resolve, reject) => {
+    const schema = require(schemaPath);
+    try {
+      val(json, schema, { throwError: true });
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
 
 module.exports = { validate };

@@ -71,33 +71,39 @@ function generateMenu (): Array<{ title: string, url: string}> {
 function generate (configArgs: ?{}): void {
   object.merge(config, configArgs);
   // Validate JSON against schema
-  let schemaPath = '../schema.json';
+  const localSchema = '../schema.json';
+  let schemaPath;
   if (config.schema) {
-    let schemaPath = path.join(process.cwd(), config.schema);
+    schemaPath = path.join(process.cwd(), config.schema);
+  } else {
+    schemaPath = localSchema;
   }
-  checkJson.validate(schemaPath, source);
-  assets.staticMove(path.join(process.cwd(), config.theme || 'theme'), outputDir, config.static);
-  let css = 'main.css';
-  if (config.output) css = config.output.css || css
-  assets.scss(path.join(process.cwd(), config.theme || 'theme', 'css', config.css || 'main.scss'), path.join(outputDir, 'css', css));
-  // Generate Menu if not in Config
-  if (!config.menu) {
-    config.menu = generateMenu();
-  }
-  fs.readdir(source, (err, pages) => {
-    if (err) throw err;
-    for (const page of pages) {
-      const url = path.parse(page).name;
-      fs.readFile(path.join(source, page), 'utf-8', (err, data) => {
-        if (err) throw err;
-        const file = fm.parse(data);
-        file.site = config;
-        // render md in to html
-        file.body = marked(file.__content__);
-        render(file.template || 'schedule', file, url);
-      });
+  checkJson.validate(schemaPath, source).then(() => {
+    assets.staticMove(path.join(process.cwd(), config.theme || 'theme'), outputDir, config.static);
+    let css = 'main.css';
+    if (config.output) css = config.output.css || css;
+    assets.scss(path.join(process.cwd(), config.theme || 'theme', 'css', config.css || 'main.scss'), path.join(outputDir, 'css', css));
+    // Generate Menu if not in Config
+    if (!config.menu) {
+      config.menu = generateMenu();
     }
+    fs.readdir(source, (err, pages) => {
+      if (err) throw err;
+      for (const page of pages) {
+        const url = path.parse(page).name;
+        fs.readFile(path.join(source, page), 'utf-8', (err, data) => {
+          if (err) throw err;
+          const file = fm.parse(data);
+          file.site = config;
+          // render md in to html
+          file.body = marked(file.__content__);
+          render(file.template || 'schedule', file, url);
+        });
+      }
+    });
+  }).catch((err) => {
+    console.error(err);
   });
-};
+}
 
 module.exports = generate;
