@@ -1,6 +1,6 @@
 {
   "name": "event-page",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "description": "simple static site generator for events",
   "main": "lib/generate.js",
   "bin": {
@@ -17,10 +17,17 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "fix": "eslint . --fix",
     "build": "babel src --source-maps --out-dir lib",
     "build:watch": "babel src --watch --source-maps --out-dir lib",
+    "format": "prettier-eslint --write \"src/**/*.js\"",
+    "precommit": "lint-staged && eslint .",
     "prepublish": "yarn run build"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ]
   },
   "dependencies": {
     "command-line-args": "^4.0.5",
@@ -45,14 +52,20 @@
     "babel-preset-es2015": "6.24.1",
     "babel-preset-flow": "^6.23.0",
     "es6-promise": "^4",
-    "eslint": "3.19.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.2",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-flowtype": "^2.33.0",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-import": "^2.6.1",
     "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-react": "^7.1.0",
     "eslint-plugin-standard": "3.0.1",
-    "flow-bin": "^0.47.0"
+    "flow-bin": "^0.47.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.1",
+    "prettier-eslint-cli": "^4.1.1"
   }
 }
