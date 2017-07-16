@@ -1,14 +1,14 @@
-const Handlebars = require('handlebars');
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
-const fm = require('json-matter');
-const marked = require('marked');
-const object = require('lodash/fp/object');
+import Handlebars from 'handlebars';
+import fs from 'fs';
+import path from 'path';
+import glob from 'glob';
+import fm from 'json-matter';
+import marked from 'marked';
+import object from 'lodash/fp/object';
 
 // Local libraries
-const checkJson = require('./checkEventJson');
-const assets = require('./assets');
+import checkJson from './checkEventJson';
+import assets from './assets';
 
 /* eslint-disable */
 // Initialise variables
@@ -117,4 +117,4 @@ function generate(configArgs: ?{}): Promise {
   });
 }
 
-module.exports = generate;
+export default generate;

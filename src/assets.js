@@ -1,6 +1,6 @@
-const fs = require('fs-extra');
-const path = require('path');
-const sass = require('node-sass');
+import fs from 'fs-extra';
+import path from 'path';
+import sass from 'node-sass';
 
 /**
  * Copy static assets from theme to dist
@@ -43,4 +43,4 @@ function scss(source: string, dest: string): Promise {
   });
 }
 
-module.exports = { staticMove, scss };
+export default { staticMove, scss };

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const fs = require('fs-extra');
-const commandLineArgs = require('command-line-args');
-const generate = require('./generate');
+import fs from 'fs-extra';
+import commandLineArgs from 'command-line-args';
+import generate from './generate';
 
 function config(): Promise {
   return new Promise((resolve, reject) => {

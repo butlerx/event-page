@@ -1,8 +1,8 @@
-const fs = require('fs');
-const glob = require('glob');
-const fm = require('json-matter');
-const path = require('path');
-const val = require('jsonschema').validate;
+import fs from 'fs';
+import glob from 'glob';
+import fm from 'json-matter';
+import path from 'path';
+import { validate as val } from 'jsonschema';
 
 let schema;
 
@@ -46,4 +46,4 @@ function validate(schemaPath: string, source: string): Promise {
   });
 }
 
-module.exports = { validate };
+export default { validate };
