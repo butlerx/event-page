@@ -15,7 +15,7 @@ To build your page, from Command line run:
 or from node
 
 ```javascript
-const event = ('event-page');
+const event = require('event-page');
 
 event({
   title: "Amazing event",
