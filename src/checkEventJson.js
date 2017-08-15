@@ -1,15 +1,13 @@
-import fs from 'fs';
-import glob from 'glob';
+import fs from 'fs-extra';
+import glob from 'glob-promise';
 import fm from 'json-matter';
 import path from 'path';
 import { validate as val } from 'jsonschema';
 
-let schema;
-
 /**
  * Check json object against schema
  **/
-const checkJson = (filename: string, json: ?{}): Promise =>
+const checkJson = (schema: ?{}, json: ?{}): Promise =>
   new Promise((resolve, reject) => {
     try {
       val(json, schema, { throwError: true });
@@ -22,28 +20,20 @@ const checkJson = (filename: string, json: ?{}): Promise =>
 /**
  * Validate all json files obey the schema
  **/
-function validate(schemaPath: string, source: string): Promise {
-  schema = require(schemaPath); // eslint-disable-line
-  return new Promise((resolve, reject) => {
-    glob(
-      path.join(source, '*.json'),
-      {
-        ignore: 'node_modules',
-      },
-      (err, files) => {
-        if (err) reject(err);
-        files.forEach(i => {
-          fs.readFile(i, 'utf-8', (err, data) => {
-            if (err) throw err;
-            const file = fm.parse(data);
-            const json = file.attributes;
-            checkJson(i, json).catch(reject);
-          });
-        });
-        resolve();
-      },
-    );
-  });
+async function validate(schemaPath: string, source: string): Promise {
+  try {
+    const schema = await fs.readJson(schemaPath);
+    const files = await glob(path.join(source, '*.json'), { ignore: 'node_modules' });
+    console.log(files);
+    files.forEach(async i => {
+      const data = await fs.readFile(i, 'utf-8');
+      const file = fm.parse(data);
+      const json = file.attributes;
+      await checkJson(schema, json);
+    });
+  } catch (err) {
+    throw err;
+  }
 }
 
 export default { validate };

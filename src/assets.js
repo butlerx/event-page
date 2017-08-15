@@ -5,15 +5,14 @@ import sass from 'node-sass';
 /**
  * Copy static assets from theme to dist
  **/
-function staticMove(source: string, dest: string, assets: Array<string>): Promise {
-  return new Promise((resolve, reject) => {
+async function staticMove(source: string, dest: string, assets: Array<string>): Promise {
+  try {
     assets.forEach(i => {
-      fs.copy(path.join(source, assets[i]), path.join(dest, assets[i]), err => {
-        if (err) reject(err);
-      });
+      fs.copy(path.join(source, assets[i]), path.join(dest, assets[i]));
     });
-    resolve();
-  });
+  } catch (err) {
+    throw err;
+  }
 }
 
 /**
@@ -29,15 +28,7 @@ function scss(source: string, dest: string): Promise {
       },
       (err, result) => {
         if (err) reject(err);
-        fs
-          .ensureFile(dest)
-          .then(() => {
-            fs.writeFile(dest, result.css, err => {
-              if (err) reject(err);
-              resolve();
-            });
-          })
-          .catch(reject);
+        fs.ensureFile(dest).then(fs.writeFile(dest, result.css)).then(resolve).catch(reject);
       },
     );
   });
