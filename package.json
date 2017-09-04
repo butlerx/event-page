@@ -21,10 +21,14 @@
     "build:watch": "babel src --watch --source-maps --out-dir lib",
     "format": "prettier-eslint --write \"src/**/*.js\"",
     "precommit": "lint-staged && eslint .",
-    "prepublish": "yarn run build"
+    "prepublish": "yarn run build",
+    "fix": "eslint . --fix"
   },
   "lint-staged": {
-    "*.js": ["prettier-eslint --write", "git add"]
+    "*.js": [
+      "prettier-eslint --write",
+      "git add"
+    ]
   },
   "dependencies": {
     "babel-core": "6.24.1",
