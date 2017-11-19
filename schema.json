@@ -115,10 +115,7 @@
                       "default": "Somewhere in DCU"
                     }
                   },
-                  "required": [
-                    "id",
-                    "map"
-                  ]
+                  "required": ["id", "map"]
                 },
                 "description": {
                   "type": "string",
@@ -126,27 +123,16 @@
                   "default": "TBA"
                 }
               },
-              "required": [
-                "name",
-                "by",
-                "time",
-                "place",
-                "description"
-              ]
+              "required": ["name", "by", "time", "place", "description"]
             }
           }
         },
-        "required": [
-          "day",
-          "description",
-          "events"
-        ]
+        "required": ["day", "description", "events"]
       }
     }
   },
   "required": [
     "title",
-    "template",
     "location",
     "start",
     "end",

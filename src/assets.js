@@ -5,14 +5,11 @@ import sass from 'node-sass';
 /**
  * Copy static assets from theme to dist
  **/
-async function staticMove(source: string, dest: string, assets: Array<string>): Promise {
-  try {
-    assets.forEach(i => {
-      fs.copy(path.join(source, assets[i]), path.join(dest, assets[i]));
-    });
-  } catch (err) {
-    throw err;
-  }
+function staticMove(source: string, dest: string, assets: Array<string>): Promise {
+  assets.forEach(folder => {
+    fs.copy(path.join(source, folder), path.join(dest, folder));
+  });
+  return Promise.resolve();
 }
 
 /**

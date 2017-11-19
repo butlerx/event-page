@@ -7,33 +7,28 @@ import { validate as val } from 'jsonschema';
 /**
  * Check json object against schema
  **/
-const checkJson = (schema: ?{}, json: ?{}): Promise =>
-  new Promise((resolve, reject) => {
-    try {
-      val(json, schema, { throwError: true });
-      resolve();
-    } catch (err) {
-      reject(err);
-    }
-  });
+const checkJson = (schema: ?{}): Function => async (json: ?{}): Promise => {
+  try {
+    delete json.__contet__; // eslint-disable-line no-underscore-dangle
+    val(json, schema, { throwError: true });
+  } catch (err) {
+    throw err;
+  }
+};
 
 /**
  * Validate all json files obey the schema
  **/
-async function validate(schemaPath: string, source: string): Promise {
+export default async function validate(schemaPath: string, source: string): Promise {
   try {
     const schema = await fs.readJson(schemaPath);
     const files = await glob(path.join(source, '*.json'), { ignore: 'node_modules' });
-    console.log(files);
-    files.forEach(async i => {
-      const data = await fs.readFile(i, 'utf-8');
-      const file = fm.parse(data);
-      const json = file.attributes;
-      await checkJson(schema, json);
-    });
+    files.forEach(file =>
+      fs.readFile(file, 'utf-8').then(fm.parse).then(checkJson(schema)).catch(err => {
+        throw err;
+      }),
+    );
   } catch (err) {
     throw err;
   }
 }
-
-export default { validate };

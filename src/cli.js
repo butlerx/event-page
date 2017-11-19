@@ -3,18 +3,13 @@ import commandLineArgs from 'command-line-args';
 import generate from './generate';
 
 function config(): Promise {
-  return new Promise((resolve, reject) => {
-    fs
-      .writeJson('./config.json', {
-        title : 'Amazing event',
-        static: ['js', 'fonts', 'images'],
-      })
-      .then(resolve('Config created'))
-      .catch(reject);
+  return fs.writeJson('./config.json', {
+    title : 'Amazing event',
+    static: ['js', 'fonts', 'images'],
   });
 }
 
-async function init() {
+export default async function init() {
   const options = commandLineArgs([
     {
       name : 'init',
@@ -35,11 +30,9 @@ async function init() {
       ]);
       console.log('theme created');
     } else {
-      console.log(await generate());
+      await generate();
     }
   } catch (err) {
     console.error(err);
   }
 }
-
-export default init;
