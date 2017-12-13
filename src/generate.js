@@ -26,9 +26,13 @@ Object.keys(helpers).forEach(helper => {
 
 /**
  * Render pages with handle bar template
+ *  @param {string} templateFile - filename of the template
+ *  @param {?} page - data for page
+ *  @param {string} url - url for page to live at
+ *  @return {Promise} - resolves once rendered
  **/
-function render(url: string): Function {
-  return async (page: ?{}): Promise => {
+function render(url) {
+  return async page => {
     try {
       const template = `${page.template || 'schedule'}.hbs`;
       // Load template and compile
@@ -53,8 +57,9 @@ function render(url: string): Function {
 /**
  * Generate a menu based on the file names in the pages dir
  * index.[md|json] is called Home
+ * @return {PromiseLikeArray.{ title: string, url: string }}
  **/
-async function generateMenu(): Promise<Array<{ title: string, url: string }>> {
+async function generateMenu() {
   try {
     const files = await fs.readdir(source);
     const filter = files.filter(file => file.substring(0, file.lastIndexOf('.')) !== 'index');
@@ -69,7 +74,12 @@ async function generateMenu(): Promise<Array<{ title: string, url: string }>> {
   }
 }
 
-export default async function generate(configArgs: ?{}): Promise<string> {
+/**
+ * generate site
+ * @param {?} configArgs - config for generate
+ * @return {Promise}
+ **/
+export default async function generate(configArgs) {
   try {
     object.merge(config, configArgs);
     // Validate JSON against schema

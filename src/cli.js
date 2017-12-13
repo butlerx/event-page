@@ -2,13 +2,20 @@ import fs from 'fs-extra';
 import commandLineArgs from 'command-line-args';
 import generate from './generate';
 
-function config(): Promise {
+/**
+ * Function to generate default config
+ * @return {Promise}
+ */
+function config() {
   return fs.writeJson('./config.json', {
     title : 'Amazing event',
     static: ['js', 'fonts', 'images'],
   });
 }
 
+/**
+ * Function to initialise site setup
+ */
 export default async function init() {
   const options = commandLineArgs([
     {
